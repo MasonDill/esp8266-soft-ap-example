@@ -1,10 +1,11 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
-const char *ssid = "ESP8266_SoftAP";
-const char *password = "12345678";
+const char *ssid = "ESP8266_SoftAP"; // set network id
+const char *password = "12345678"; // set ap password
 
 ESP8266WebServer server(80); // Create a web server on port 80
+IPAddress apIP(0, 0, 0, 0);  // Create custom IP address
 
 // Handles HTTP GET requests to '/'
 void handleGetRoot() {
@@ -19,7 +20,7 @@ void handleGetRoot() {
   server.send(200, "text/html", message);
 }
 
-// Handles HTTP post requests to '/'
+// Handles HTTP POST requests to '/'
 void handlePostRoot() {
   String message = "<h1>POST data received</h1>";
 
@@ -41,6 +42,8 @@ void setup() {
 
   // Set up the Soft AP
   WiFi.softAP(ssid, password);
+  WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+
   Serial.println("Access Point Started");
   Serial.print("AP IP address: ");
   Serial.println(WiFi.softAPIP());
